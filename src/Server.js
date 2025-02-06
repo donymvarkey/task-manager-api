@@ -17,6 +17,7 @@ import { EApplicationEnvironment } from './constants/application.js';
 // Import Routes
 import AuthRoute from './routes/AuthRoute.js';
 import HealthRoute from './routes/HealthRoute.js';
+import OrganizationRoute from './routes/OrganizationRoute.js';
 import UserRoute from './routes/UserRoute.js';
 
 class Server {
@@ -53,6 +54,7 @@ class Server {
   async mountRoutes() {
     this.api.use('/api/auth', AuthRoute);
     this.api.use('/api/health', HealthRoute);
+    this.api.use('/api/organization', OrganizationRoute);
     this.api.use('/api/user', UserRoute);
 
     // Swagger Setup on Dev env only
