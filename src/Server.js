@@ -8,13 +8,16 @@ import { serve, setup } from 'swagger-ui-express';
 import { expressAnalytics } from 'node-api-analytics';
 import { connectMongodb } from './database/DataBaseController.js';
 import { swaggerSpec } from './config/Swagger.js';
-
-// Import Routes
-import HealthRoute from './routes/HealthRoute.js';
 import logger from './utils/logger.js';
 import { NOT_FOUND } from './constants/responseMessages.js';
 import httpError from './utils/httpError.js';
 import globalErrorhandler from './middlewares/globalErrorHandler.js';
+import { EApplicationEnvironment } from './constants/application.js';
+
+// Import Routes
+import AuthRoute from './routes/AuthRoute.js';
+import HealthRoute from './routes/HealthRoute.js';
+import UserRoute from './routes/UserRoute.js';
 
 class Server {
   constructor(options) {
@@ -48,10 +51,14 @@ class Server {
   }
 
   async mountRoutes() {
+    this.api.use('/api/auth', AuthRoute);
     this.api.use('/api/health', HealthRoute);
+    this.api.use('/api/user', UserRoute);
 
-    // Swagger Setup
-    this.api.use('/api/docs', serve, setup(swaggerSpec));
+    // Swagger Setup on Dev env only
+    if (this.options.nodeEnv === EApplicationEnvironment.DEVELOPMENT) {
+      this.api.use('/api/docs', serve, setup(swaggerSpec));
+    }
     return true;
   }
 
@@ -79,9 +86,10 @@ class Server {
           SERVER_URL: this.options.server_url,
         },
       });
-      logger.info('SWAGGER_STARTED ', {
-        meta: { url: `${this.options.server_url}/api/docs` },
-      });
+      this.options.nodeEnv === EApplicationEnvironment.DEVELOPMENT &&
+        logger.info('SWAGGER_STARTED ', {
+          meta: { url: `${this.options.server_url}/api/docs` },
+        });
       this.options.db_url && (await connectMongodb(this.options.db_url));
     });
 

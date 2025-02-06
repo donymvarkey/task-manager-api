@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const profileSchema = new Schema(
   {
@@ -10,6 +10,6 @@ const profileSchema = new Schema(
   { timestamps: true },
 );
 
-const Profile = Model('Profile', profileSchema);
+const Profile = model('Profile', profileSchema);
 
 export default Profile;

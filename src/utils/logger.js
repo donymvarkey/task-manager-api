@@ -1,17 +1,17 @@
 'use strict';
 import { createLogger, format, transports } from 'winston';
 import { inspect } from 'util';
-import { dirname } from 'path';
+import { resolve } from 'path';
 import { install } from 'source-map-support';
 import { red, blue, yellow, green, magenta } from 'colorette';
 import config from '../config/index.js';
-import EApplicationEnvironment from '../constants/application.js';
+import { EApplicationEnvironment } from '../constants/application.js';
 
 // For linking trace support
 install();
 
 // Log file URL.
-const __fileName = `../../logs/${config.env}.log`;
+const __fileName = resolve(`./logs/${config.env}.log`);
 
 // Colorize the level string
 const colorizeLevel = (level) => {
@@ -79,8 +79,8 @@ const fileLogFormat = format.printf((info) => {
 const FileTransport = () => {
   return [
     new transports.File({
-      filename: dirname(__fileName),
-      level: 'info',
+      filename: __fileName,
+      level: 'error',
       format: format.combine(format.timestamp(), fileLogFormat),
     }),
   ];

@@ -1,4 +1,4 @@
-const { Schema, Model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const organizationSchema = new Schema(
   {
@@ -8,6 +8,6 @@ const organizationSchema = new Schema(
   { timestamps: true },
 );
 
-const Organization = Model('Organization', organizationSchema);
+const Organization = model('Organization', organizationSchema);
 
 export default Organization;

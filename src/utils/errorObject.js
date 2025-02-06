@@ -1,5 +1,5 @@
 import appConfig from '../config/index.js';
-import EApplicationEnvironment from '../constants/application.js';
+import { EApplicationEnvironment } from '../constants/application.js';
 import { SOMETHING_WENT_WRONG } from '../constants/responseMessages.js';
 import logger from './logger.js';
 

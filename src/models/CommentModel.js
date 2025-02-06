@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const commentSchema = new Schema(
   {
@@ -10,6 +10,6 @@ const commentSchema = new Schema(
   { timestamps: true },
 );
 
-const Comment = Model('Comment', commentSchema);
+const Comment = model('Comment', commentSchema);
 
 export default Comment;

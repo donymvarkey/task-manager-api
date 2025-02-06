@@ -1,5 +1,5 @@
 import appConfig from '../config/index.js';
-import EApplicationEnvironment from '../constants/application.js';
+import { EApplicationEnvironment } from '../constants/application.js';
 import logger from './logger.js';
 
 const httpResponse = (req, res, responseStatusCode, responseMessage, data) => {

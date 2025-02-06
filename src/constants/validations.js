@@ -6,7 +6,7 @@ const registrationSchema = joi.object({
   email: joi.string().email().required(),
   password: joi.string().min(8).max(30).pattern(passwordRegex).required(),
   name: joi.string().required(),
-  image: joi.string().uri(),
+  avatar: joi.string().uri(),
 });
 
 const loginSchema = joi.object({
@@ -39,7 +39,7 @@ const commentSchema = joi.object({
   project: joi.string().required(),
 });
 
-export default {
+export {
   registrationSchema,
   passwordRegex,
   loginSchema,

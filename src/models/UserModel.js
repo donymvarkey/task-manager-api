@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userModel = new Schema(
@@ -8,8 +8,6 @@ const userModel = new Schema(
   },
   { timestamps: true },
 );
-
-const User = Model('User', userModel);
 
 userModel.pre('save', function (next) {
   if (!this.isModified('password')) {
@@ -28,5 +26,7 @@ userModel.pre('save', function (next) {
 userModel.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
+
+const User = model('User', userModel);
 
 export default User;
