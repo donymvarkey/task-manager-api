@@ -1,5 +1,6 @@
 import { loadavg, totalmem, freemem } from 'os';
 import config from '../config/index.js';
+import jwt from 'jsonwebtoken';
 
 const getApplicationHealth = () => {
   return {
@@ -20,4 +21,10 @@ const getSystemHealth = () => {
   };
 };
 
-export { getApplicationHealth, getSystemHealth };
+const generateAccessToken = (data) => {
+  const secretKey = config.secret;
+  const token = jwt.sign(data, secretKey, { expiresIn: '1h' });
+  return token;
+};
+
+export { getApplicationHealth, getSystemHealth, generateAccessToken };

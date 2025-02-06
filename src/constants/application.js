@@ -21,4 +21,4 @@ const TaskStatus = {
 Object.freeze(EApplicationEnvironment);
 Object.freeze(TaskStatus);
 
-export default { EApplicationEnvironment, TaskStatus };
+export { EApplicationEnvironment, TaskStatus };

@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const taskSchema = new Schema(
   {
@@ -20,6 +20,6 @@ const taskSchema = new Schema(
   { timestamps: true },
 );
 
-const Task = Model('Task', taskSchema);
+const Task = model('Task', taskSchema);
 
 export default Task;

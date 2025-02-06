@@ -1,4 +1,4 @@
-const { Schema, Model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const projectSchema = new Schema(
   {
@@ -15,6 +15,6 @@ const projectSchema = new Schema(
   { timestamps: true },
 );
 
-const Project = Model('Project', projectSchema);
+const Project = model('Project', projectSchema);
 
 export default Project;

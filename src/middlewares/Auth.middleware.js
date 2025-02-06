@@ -1,4 +1,6 @@
-import { verify as _verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import appConfig from '../config/index.js';
+import httpResponse from '../utils/httpResponse.js';
 
 export function allowCrossDomain(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -22,19 +24,13 @@ export function isAuthorized(req, res, next) {
 
   // Check if the Authorization header is missing or empty
   if (!verificationHeader) {
-    return res.status(401).json({
-      status: false,
-      msg: 'Unauthorized User',
-    });
+    return httpResponse(req, res, 401, 'Unauthorized User', null);
   }
 
   // Verify the JWT token
-  _verify(accessToken, process.env.ATK_SECRET, (err, decoded) => {
+  jwt.verify(accessToken, appConfig.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).json({
-        status: false,
-        msg: 'Invalid or expired token',
-      });
+      return httpResponse(req, res, 401, 'Invalid or expired token', null);
     }
 
     // Attach the decoded user information to the request object
@@ -48,7 +44,7 @@ export function isAdmin(req, res, next) {
   const verificationHeader = req.headers['x-auth-token'];
 
   try {
-    const verify = _verify(verificationHeader, process.env.ATK_SECRET);
+    const verify = jwt.verify(verificationHeader, process.env.ATK_SECRET);
     if (verify.role !== 'admin') {
       return res.status(401).json({
         status: false,
