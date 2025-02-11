@@ -39,7 +39,13 @@ const signIn = async (req, res, next) => {
     const user = await loginService(email, password);
 
     if (!user) {
-      return httpResponse(req, res, 400, 'Login failed', user);
+      return httpResponse(
+        req,
+        res,
+        400,
+        'Invalid credentials or user not found',
+        null,
+      );
     }
 
     const payload = {

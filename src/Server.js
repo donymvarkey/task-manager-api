@@ -18,6 +18,7 @@ import { EApplicationEnvironment } from './constants/application.js';
 import AuthRoute from './routes/AuthRoute.js';
 import HealthRoute from './routes/HealthRoute.js';
 import OrganizationRoute from './routes/OrganizationRoute.js';
+import ProjectRoute from './routes/ProjectRoute.js';
 import UserRoute from './routes/UserRoute.js';
 
 class Server {
@@ -35,7 +36,7 @@ class Server {
     api.use(json({ limit: '10mb', extended: true }));
     api.use(
       cors({
-        origin: ['*'],
+        origin: '*',
         credentials: true,
       }),
     ); //allow cross domain requesting of urls
@@ -55,6 +56,7 @@ class Server {
     this.api.use('/api/auth', AuthRoute);
     this.api.use('/api/health', HealthRoute);
     this.api.use('/api/organization', OrganizationRoute);
+    this.api.use('/api/project', ProjectRoute);
     this.api.use('/api/user', UserRoute);
 
     // Swagger Setup on Dev env only

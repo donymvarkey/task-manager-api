@@ -21,7 +21,6 @@ const organizationSchema = joi.object({
 const projectSchema = joi.object({
   name: joi.string().required(),
   description: joi.string().required(),
-  organization: joi.string().required(),
 });
 
 const taskSchema = joi.object({

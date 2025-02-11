@@ -6,7 +6,7 @@ const EApplicationEnvironment = {
 const TaskStatus = {
   TODO: 0,
   IN_PROGRESS: 1,
-  COMPLETED: 2,
+  DONE: 2,
   ON_HOLD: 3,
   BLOCKED: 4,
   CANCELLED: 5,
