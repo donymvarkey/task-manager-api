@@ -96,7 +96,7 @@ const loginService = async (email, password) => {
       logger.error('AUTH_FAILURE', {
         meta: { message: 'User not found' },
       });
-      throw new Error('User not found');
+      return null;
     }
 
     const isPasswordValid = await user.comparePassword(password, user.password);
@@ -105,7 +105,7 @@ const loginService = async (email, password) => {
       logger.error('AUTH_FAILURE', {
         meta: { message: 'Invalid credentials' },
       });
-      throw new Error('Invalid credentials');
+      return null;
     }
 
     return user;

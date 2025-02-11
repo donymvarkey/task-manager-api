@@ -51,12 +51,12 @@ router.post('/signup', signUp);
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *               password:
  *                 type: string
  *             required:
- *               - username
+ *               - email
  *               - password
  *     responses:
  *       200:
