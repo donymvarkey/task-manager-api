@@ -2,9 +2,12 @@ import { Router } from 'express';
 import { isAuthorized } from '../middlewares/Auth.middleware.js';
 import {
   createOrg,
+  createOrgJoinCode,
   deleteOrg,
+  getAllOrgMembers,
   getOrgByOrgID,
   getOrgsByOwnerID,
+  joinOrg,
 } from '../controllers/OrganizationController.js';
 
 const router = Router();
@@ -117,5 +120,82 @@ router.get('/:orgId', isAuthorized, getOrgByOrgID);
  *         description: Unauthorized
  */
 router.get('/owner/:ownerId', isAuthorized, getOrgsByOwnerID);
+
+/**
+ * @swagger
+ * /api/organization/members/{orgId}:
+ *   get:
+ *     summary: Get organizations members
+ *     tags: [Organizations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: orgId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Organization ID
+ *     responses:
+ *       200:
+ *         description: Members retrieved successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/members/:orgId', isAuthorized, getAllOrgMembers);
+
+/**
+ * @swagger
+ * /api/organization/join:
+ *   post:
+ *     summary: Join a new organization
+ *     tags: [Organizations]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               inviteCode:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Organization joined successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ */
+router.post('/join', isAuthorized, joinOrg);
+
+/**
+ * @swagger
+ * /api/organization/create/code/{orgId}:
+ *   get:
+ *     summary: Join a new organization
+ *     tags: [Organizations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: orgId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Organization ID
+ *     responses:
+ *       201:
+ *         description: Organization joined successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/create/code/:orgId', isAuthorized, createOrgJoinCode);
 
 export default router;

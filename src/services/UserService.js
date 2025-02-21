@@ -1,14 +1,22 @@
-import Profile from '../models/ProfileModel.js';
+import Organization from '../models/OrganizationModel.js';
+import User from '../models/UserModel.js';
 
 const getUserProfile = async (userId) => {
   try {
-    const data = await Profile.findOne({ user_id: userId });
+    const user = await User.findById(userId).select('-password');
+    const org = await Organization.findOne({ owner: userId }).populate({
+      path: 'owner',
+      select: '-password',
+    });
 
-    if (!data) {
+    if (!user || !org) {
       return null;
     }
 
-    return data;
+    return {
+      user,
+      org,
+    };
   } catch (error) {
     return error;
   }

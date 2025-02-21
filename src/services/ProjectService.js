@@ -1,5 +1,5 @@
+import { MEMBER_OPERATIONS } from '../constants/application.js';
 import Project from '../models/ProjectModel.js';
-import Task from '../models/TaskModel.js';
 
 const createNewProject = async (data) => {
   try {
@@ -122,27 +122,28 @@ const setProjectAsCurrent = async (projectId, userId) => {
   }
 };
 
-const taskData = async (projectId) => {
+const updateMembersArray = async (projectId, userIds, type) => {
   try {
-    const totalTasksCount = await Task.countDocuments({
-      project: projectId,
+    let query;
+
+    if (type === MEMBER_OPERATIONS.ADD) {
+      query = {
+        $addToSet: { members: { $each: userIds } },
+      };
+    } else {
+      query = {
+        $pull: { members: { $in: userIds } },
+      };
+    }
+    const data = await Project.findByIdAndUpdate(projectId, query, {
+      new: true,
     });
 
-    const completedTasks = await Task.aggregate([
-      { $match: { $and: { project: projectId, status: 2 } } },
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 },
-        },
-      },
-    ]);
+    if (!data) {
+      return null;
+    }
 
-    return {
-      totalTasks: totalTasksCount,
-      completedTasks,
-      percentage: (completedTasks / totalTasksCount) * 100,
-    };
+    return data;
   } catch (error) {
     return error;
   }
@@ -155,5 +156,5 @@ export {
   getAllUserProjects,
   getProjectById,
   setProjectAsCurrent,
-  taskData,
+  updateMembersArray,
 };

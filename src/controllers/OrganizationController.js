@@ -6,7 +6,11 @@ import {
   deleteOrgById,
   getAllOrgsByOwnerId,
   getOrgById,
+  getOrgMembers,
+  joinToOrg,
 } from '../services/OrganizationService.js';
+import { cryptoRandomInt } from '../utils/common.js';
+import { deleteKey, getKey, setKey } from '../database/Redis.js';
 
 const createOrg = async (req, res, next) => {
   try {
@@ -88,4 +92,69 @@ const getOrgsByOwnerID = async (req, res, next) => {
   }
 };
 
-export { createOrg, deleteOrg, getOrgByOrgID, getOrgsByOwnerID };
+const getAllOrgMembers = async (req, res, next) => {
+  try {
+    const { page } = req.query;
+    const members = await getOrgMembers(req?.params?.orgId, page);
+
+    if (!members) {
+      return httpResponse(req, res, 400, 'Failed to fetch members', null);
+    }
+
+    return httpResponse(req, res, 200, 'Members fetched', members);
+  } catch (error) {
+    logger.error('SERVER_ERROR', { meta: { message: error.message } });
+    next(error);
+  }
+};
+
+const joinOrg = async (req, res, next) => {
+  try {
+    const { inviteCode } = req.body;
+    const inviteData = await getKey(inviteCode);
+
+    if (!inviteData) {
+      return httpResponse(
+        req,
+        res,
+        400,
+        'Invalid or expired invite code',
+        null,
+      );
+    }
+    const data = await joinToOrg(inviteData, req?.user?.user_id);
+
+    if (!data) {
+      return httpResponse(req, res, 400, 'Failed to join organization', null);
+    }
+
+    await deleteKey(inviteCode);
+
+    return httpResponse(req, res, 200, 'Organization joined', data);
+  } catch (error) {
+    logger.error('SERVER_ERROR', { meta: { message: error.message } });
+    next(error);
+  }
+};
+
+const createOrgJoinCode = async (req, res, next) => {
+  try {
+    const { orgId } = req.params;
+    const inviteCode = cryptoRandomInt();
+    await setKey(inviteCode, orgId);
+    return httpResponse(req, res, 200, 'Code generated', { code: inviteCode });
+  } catch (error) {
+    logger.error('SERVER_ERROR', { meta: { message: error.message } });
+    next(error);
+  }
+};
+
+export {
+  createOrg,
+  deleteOrg,
+  getOrgByOrgID,
+  getOrgsByOwnerID,
+  getAllOrgMembers,
+  joinOrg,
+  createOrgJoinCode,
+};
