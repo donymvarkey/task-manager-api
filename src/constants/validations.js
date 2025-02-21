@@ -27,6 +27,8 @@ const taskSchema = joi.object({
   title: joi.string().required(),
   description: joi.string().required(),
   project: joi.string().required(),
+  type: joi.number(),
+  priority: joi.number(),
   start_date: joi.date(),
   end_date: joi.date(),
   media: joi.array().items(joi.string()),

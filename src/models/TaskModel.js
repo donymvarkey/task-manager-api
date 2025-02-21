@@ -5,10 +5,11 @@ const taskSchema = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     project: { type: Schema.Types.ObjectId, required: true, ref: 'Project' },
+    type: { type: Number, required: true },
+    priority: { type: Number, default: 0 }, // Low priority by default
     assigned_to: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: '',
       required: false,
     },
     status: { type: Number, default: 0, required: false },

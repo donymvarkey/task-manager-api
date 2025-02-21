@@ -1,4 +1,3 @@
-import Profile from '../models/ProfileModel.js';
 import User from '../models/UserModel.js';
 import logger from '../utils/logger.js';
 
@@ -17,6 +16,7 @@ const createUser = async (data) => {
     const newUser = new User({
       email: data?.email,
       password: data?.password,
+      name: data?.name,
     });
 
     const userObj = await newUser.save();
@@ -30,21 +30,7 @@ const createUser = async (data) => {
 
     // need to implement the image upload functionality as well. It will be a separate handler.
 
-    const userProfile = await createUserProfile(
-      data?.email,
-      data?.name,
-      userObj?._id,
-      '',
-    );
-
-    if (!userProfile) {
-      logger.error('OPERATION_FAILURE', {
-        meta: { message: 'Failed to create user profile entry' },
-      });
-      throw new Error('Failed to create user profile entry');
-    }
-
-    return userProfile;
+    return userObj;
   } catch (error) {
     return error;
   }
@@ -59,26 +45,26 @@ const createUser = async (data) => {
  * @param {string} [avatar=''] - The avatar URL of the user (optional).
  * @returns {Promise<Object|null|Error>} The created user profile object, null if creation failed, or an error if an exception occurred.
  */
-const createUserProfile = async (email, name, user_id, avatar) => {
-  try {
-    const newUserProfile = new Profile({
-      name,
-      email,
-      user_id,
-      avatar,
-    });
+// const createUserProfile = async (email, name, user_id, avatar) => {
+//   try {
+//     const newUserProfile = new Profile({
+//       name,
+//       email,
+//       user_id,
+//       avatar,
+//     });
 
-    const userProfile = await newUserProfile.save();
+//     const userProfile = await newUserProfile.save();
 
-    if (!userProfile) {
-      return null;
-    }
+//     if (!userProfile) {
+//       return null;
+//     }
 
-    return userProfile;
-  } catch (error) {
-    return error;
-  }
-};
+//     return userProfile;
+//   } catch (error) {
+//     return error;
+//   }
+// };
 
 /**
  * Authenticates a user by their email and password.

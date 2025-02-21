@@ -5,6 +5,7 @@ import {
   deleteProject,
   fetchProjectDetails,
   fetchProjectsByUser,
+  memberOperations,
   setCurrentProject,
   updateProject,
 } from '../controllers/ProjectController.js';
@@ -199,5 +200,32 @@ router.get('/user/list', isAuthorized, fetchProjectsByUser);
  *         description: Project not found
  */
 router.get('/current/:projectId', isAuthorized, setCurrentProject);
+
+/**
+ * @swagger
+ * /api/project/member/{operation}/{projectId}:
+ *   post:
+ *     summary: Add a member to a project
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the project to set as active
+ *     responses:
+ *       200:
+ *         description: Project set as active successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Project not found
+ */
+router.post('/member/:operation/:projectId', isAuthorized, memberOperations);
 
 export default router;

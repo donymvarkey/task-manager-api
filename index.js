@@ -8,6 +8,7 @@ const options = {
   nodeEnv: appConfig.env,
   server_url: appConfig.server_url,
   api_analytics_key: appConfig.analytics_api_key,
+  redis_url: appConfig.redis_url,
 };
 
 const app = new Server(options);

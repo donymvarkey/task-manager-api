@@ -1,4 +1,5 @@
 import { loadavg, totalmem, freemem } from 'os';
+import crypto from 'crypto';
 import config from '../config/index.js';
 import jwt from 'jsonwebtoken';
 
@@ -27,4 +28,20 @@ const generateAccessToken = (data) => {
   return token;
 };
 
-export { getApplicationHealth, getSystemHealth, generateAccessToken };
+/**
+ * Generates a cryptographically secure random integer within a given range.
+ * @returns {number} - A random integer between min and max.
+ */
+const cryptoRandomInt = () => {
+  const randomBytes = crypto.randomBytes(6); // Get 6 random bytes
+  const randomValue = randomBytes.readUInt32BE(0); // Convert to 32-bit unsigned integer
+
+  return randomValue; // Map to range
+};
+
+export {
+  getApplicationHealth,
+  getSystemHealth,
+  generateAccessToken,
+  cryptoRandomInt,
+};

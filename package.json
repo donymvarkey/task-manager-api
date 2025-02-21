@@ -1,6 +1,6 @@
 {
   "name": "task-manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "REST API for task-manager",
   "main": "index.js",
   "type": "module",
@@ -31,6 +31,7 @@
     "dotenv-flow": "^4.1.0",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
+    "ioredis": "^5.5.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",

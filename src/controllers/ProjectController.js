@@ -7,6 +7,7 @@ import {
   getAllUserProjects,
   getProjectById,
   setProjectAsCurrent,
+  updateMembersArray,
   updateProjectById,
 } from '../services/ProjectService.js';
 
@@ -20,8 +21,8 @@ const createProject = async (req, res, next) => {
 
     const data = {
       ...req.body,
-      // organization: req.params.orgId,
       admin: req.user.user_id,
+      members: [req.user.user_id],
     };
 
     const project = await createNewProject(data);
@@ -131,6 +132,28 @@ const setCurrentProject = async (req, res, next) => {
   }
 };
 
+const memberOperations = async (req, res, next) => {
+  try {
+    const [operation, projectId] = req.params;
+    const { userIdArray } = req.body;
+
+    if (userIdArray.length === 0) {
+      return httpResponse(req, res, 400, 'No user id provided', null);
+    }
+
+    const data = await updateMembersArray(projectId, userIdArray, operation);
+
+    if (!data) {
+      return httpResponse(req, res, 400, `Failed to ${operation} member`, null);
+    }
+
+    return httpResponse(req, res, 200, `Member ${operation} success`, data);
+  } catch (error) {
+    logger.error('SERVER_ERROR', { meta: { message: error.message } });
+    next(error);
+  }
+};
+
 export {
   createProject,
   updateProject,
@@ -138,4 +161,5 @@ export {
   fetchProjectDetails,
   fetchProjectsByUser,
   setCurrentProject,
+  memberOperations,
 };

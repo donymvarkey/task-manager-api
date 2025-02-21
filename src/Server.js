@@ -19,7 +19,9 @@ import AuthRoute from './routes/AuthRoute.js';
 import HealthRoute from './routes/HealthRoute.js';
 import OrganizationRoute from './routes/OrganizationRoute.js';
 import ProjectRoute from './routes/ProjectRoute.js';
+import TaskRoute from './routes/TaskRoute.js';
 import UserRoute from './routes/UserRoute.js';
+import { createRedisClient } from './database/Redis.js';
 
 class Server {
   constructor(options) {
@@ -57,6 +59,7 @@ class Server {
     this.api.use('/api/health', HealthRoute);
     this.api.use('/api/organization', OrganizationRoute);
     this.api.use('/api/project', ProjectRoute);
+    this.api.use('/api/task', TaskRoute);
     this.api.use('/api/user', UserRoute);
 
     // Swagger Setup on Dev env only
@@ -95,6 +98,7 @@ class Server {
           meta: { url: `${this.options.server_url}/api/docs` },
         });
       this.options.db_url && (await connectMongodb(this.options.db_url));
+      await createRedisClient();
     });
 
     // Handle user interrupts eg: CTRL+C, CTRL+Z
